@@ -36,6 +36,34 @@ class Tetromino:
          occupied_cells.append((1, 1))
          occupied_cells.append((1, 2))
          occupied_cells.append((2, 2))
+
+      elif self.type == 'L':
+         n = 3
+         occupied_cells.append((0, 0))  # (column_index, row_index)
+         occupied_cells.append((0, 1))
+         occupied_cells.append((0, 2))
+         occupied_cells.append((1, 2))
+
+      elif self.type == 'J':
+         n = 3
+         occupied_cells.append((0, 2))  # (column_index, row_index)
+         occupied_cells.append((1, 0))
+         occupied_cells.append((1, 1))
+         occupied_cells.append((1, 2))
+
+      elif self.type == 'S':
+         n = 3
+         occupied_cells.append((0, 1))  # (column_index, row_index)
+         occupied_cells.append((1, 1))
+         occupied_cells.append((1, 0))
+         occupied_cells.append((2, 0))
+
+      elif self.type == 'T':
+         n = 3
+         occupied_cells.append((0, 0))  # (column_index, row_index)
+         occupied_cells.append((1,0))
+         occupied_cells.append((2, 0))
+         occupied_cells.append((1, 1))
       # create a matrix of numbered tiles based on the shape of this tetromino
       self.tile_matrix = np.full((n, n), None)
       # create the four tiles (minos) of this tetromino and place these tiles
@@ -109,6 +137,27 @@ class Tetromino:
                if position.y < Tetromino.grid_height:
                   self.tile_matrix[row][col].draw(position)
 
+   def rotate(self, game_grid):
+      n = len(self.tile_matrix)
+
+      rotated = np.full((n,n), None)
+      for row in range(n):
+         for col in range(n):
+            rotated[col][n-1-row] = self.tile_matrix[row][col]
+
+      #check where it would appear on the grid
+      for row in range(n):
+         for col in range(n):
+            tile = rotated[row][col]
+            if tile is not None:
+               pos = self.get_cell_position(row, col)
+               if pos.x < 0 or pos.x >= Tetromino.grid_width or pos.y < 0:
+                  return  # Outside grid
+               if pos.y < Tetromino.grid_height and game_grid.is_occupied(pos.y, pos.x):
+                  return  # Collision with existing tile
+
+      self.tile_matrix = rotated
+
    # A method for moving this tetromino in a given direction by 1 on the grid
    def move(self, direction, game_grid):
       # check if this tetromino can be moved in the given direction by using
@@ -123,6 +172,10 @@ class Tetromino:
       else:  # direction == "down"
          self.bottom_left_cell.y -= 1
       return True  # a successful move in the given direction
+
+   def hard_drop(self, game_grid):
+      while self.move("down", game_grid):
+         pass
 
    # A method for checking if this tetromino can be moved in a given direction
    def can_be_moved(self, direction, game_grid):
