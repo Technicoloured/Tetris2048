@@ -55,6 +55,12 @@ def start():
             # move the active tetromino down by one
             # (soft drop: causes the tetromino to fall down faster)
             current_tetromino.move(key_typed, grid)
+         #rotation
+         elif key_typed == "up":
+            current_tetromino.rotate(grid)
+         #hard drop
+         elif key_typed == "space":
+            current_tetromino.hard_drop(grid)
          # clear the queue of the pressed keys for a smoother interaction
          stddraw.clearKeysTyped()
 
@@ -84,7 +90,7 @@ def start():
 # A function for creating random shaped tetrominoes to enter the game grid
 def create_tetromino():
    # the type (shape) of the tetromino is determined randomly
-   tetromino_types = ['I', 'O', 'Z']
+   tetromino_types = ['I','O','Z','L','J','S','T']
    random_index = random.randint(0, len(tetromino_types) - 1)
    random_type = tetromino_types[random_index]
    # create and return the tetromino
@@ -94,9 +100,9 @@ def create_tetromino():
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
    # the colors used for the menu
-   background_color = Color(42, 69, 99)
-   button_color = Color(25, 255, 228)
-   text_color = Color(31, 160, 239)
+   background_color = Color(255, 230, 240)  # Light pink background
+   button_color = Color(255, 180, 200)     # Medium pink button
+   text_color = Color(200, 80, 120)        # Dark pink text
    # clear the background drawing canvas to background_color
    stddraw.clear(background_color)
    # get the directory in which this python code file is placed
@@ -135,7 +141,6 @@ def display_game_menu(grid_height, grid_width):
          if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
             if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
                break  # break the loop to end the method and start the game
-
 
 # start() function is specified as the entry point (main function) from which
 # the program starts execution
