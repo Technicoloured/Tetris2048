@@ -62,6 +62,16 @@ class Color:
 
 # Some predefined Color objects:
 
+# Add these to your existing color definitions
+PINKISH_NUDE = Color(245, 203, 167)      # Base nude
+BLUSH_PINK = Color(255, 182, 193)        # Light pink
+HOT_PINK = Color(255, 105, 180)          # Bright pink
+DEEP_PINK = Color(255, 20, 147)          # Dark pink
+DUSTY_ROSE = Color(220, 152, 153)        # Muted pink
+MAUVE = Color(224, 176, 195)             # Purple-pink
+PEACH_PINK = Color(255, 218, 185)        # Warm nude-pink
+PALE_PINK = Color(250, 230, 230)         # Very light pink
+
 WHITE      = Color(255, 255, 255)
 BLACK      = Color(  0,   0,   0)
 
