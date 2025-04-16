@@ -11,16 +11,18 @@ import os  # the os module is used for file and directory operations
 from game_grid import GameGrid  # the class for modeling the game grid
 from tetromino import Tetromino  # the class for modeling the tetrominoes
 import random  # used for creating tetrominoes with random types (shapes)
+import pygame # for soundplay
 
 # The main function where this program starts execution
 def start():
+
    # set the dimensions of the game grid
    grid_h, grid_w = 20, 12
    # set the size of the drawing canvas (the displayed window)
-   canvas_h, canvas_w = 40 * grid_h, 40 * (grid_w + 6)
+   canvas_h, canvas_w = 40 * grid_h, 40 * grid_w
    stddraw.setCanvasSize(canvas_w, canvas_h)
    # set the scale of the coordinate system for the drawing canvas
-   stddraw.setXscale(-0.5, grid_w + 5.5)
+   stddraw.setXscale(-0.5, grid_w - 0.5)
    stddraw.setYscale(-0.5, grid_h - 0.5)
 
    # set the game grid dimension values stored and used in the Tetromino class
@@ -31,10 +33,7 @@ def start():
    # create the first tetromino to enter the game grid
    # by using the create_tetromino function defined below
    current_tetromino = create_tetromino()
-   next_tetromino = create_tetromino()
    grid.current_tetromino = current_tetromino
-   grid.next_tetromino = next_tetromino
-
 
    # display a simple menu before opening the game
    # by using the display_game_menu function defined below
@@ -76,14 +75,16 @@ def start():
          tiles, pos = current_tetromino.get_min_bounded_tile_matrix(True)
          # update the game grid by locking the tiles of the landed tetromino
          game_over = grid.update_grid(tiles, pos)
+
+         grid.remove_full_rows()
+
          # end the main game loop if the game is over
          if game_over:
             break
          # create the next tetromino to enter the game grid
          # by using the create_tetromino function defined below
-         current_tetromino = grid.next_tetromino
+         current_tetromino = create_tetromino()
          grid.current_tetromino = current_tetromino
-         grid.next_tetromino = create_tetromino()
 
       # display the game grid with the current tetromino
       grid.display()
@@ -132,7 +133,6 @@ def display_game_menu(grid_height, grid_width):
    stddraw.setPenColor(text_color)
    text_to_display = "Click Here to Start the Game"
    stddraw.text(img_center_x, 5, text_to_display)
-
    # Display names on the right with a thicker and more serious font
    name_x = grid_width + 3
    name_y = grid_height - 5
@@ -159,6 +159,10 @@ def display_game_menu(grid_height, grid_width):
          # check if these coordinates are inside the button
          if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
             if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
+               pygame.mixer.init()
+               pygame.mixer.music.load('tetris99.mp3')
+               pygame.mixer.music.set_volume(0.02)
+               pygame.mixer.music.play(-1)
                break  # break the loop to end the method and start the game
 
 # start() function is specified as the entry point (main function) from which
