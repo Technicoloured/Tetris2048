@@ -31,6 +31,10 @@ class GameGrid:
         self.draw_next_tetromino()  # Draw next piece preview
         self.draw_boundaries()
         stddraw.show(250)
+        stddraw.setFontSize(16)
+        stddraw.setPenColor(stddraw.BLACK)
+        stddraw.text(self.grid_width + 3, 1, "Score: 0")
+
 
     def draw_next_tetromino(self):
         if self.next_tetromino is not None:
@@ -38,15 +42,15 @@ class GameGrid:
             stddraw.setPenColor(Color(231, 84, 128))
             stddraw.setFontFamily("Arial")
             stddraw.setFontSize(14)
-            stddraw.text(self.grid_width - 3, self.grid_height - 1.5, "Next:")
+            stddraw.text(self.grid_width + 3, self.grid_height - 1.5, "Next:")
 
             # Save original position
             original_pos = cp.copy(self.next_tetromino.bottom_left_cell)
 
             # Position for preview (top right)
             preview_size = len(self.next_tetromino.tile_matrix)
-            self.next_tetromino.bottom_left_cell.x = self.grid_width - preview_size - 1
-            self.next_tetromino.bottom_left_cell.y = self.grid_height - preview_size - 2
+            self.next_tetromino.bottom_left_cell.x = self.grid_width + 2
+            self.next_tetromino.bottom_left_cell.y = self.grid_height - len(self.next_tetromino.tile_matrix) - 2
 
             # Draw scaled down
             for row in range(preview_size):
