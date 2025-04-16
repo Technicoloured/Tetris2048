@@ -20,7 +20,7 @@ def start():
    canvas_h, canvas_w = 40 * grid_h, 40 * (grid_w + 6)
    stddraw.setCanvasSize(canvas_w, canvas_h)
    # set the scale of the coordinate system for the drawing canvas
-   stddraw.setXscale(-0.5, grid_w - 0.5)
+   stddraw.setXscale(-0.5, grid_w + 5.5)
    stddraw.setYscale(-0.5, grid_h - 0.5)
 
    # set the game grid dimension values stored and used in the Tetromino class
