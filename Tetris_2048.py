@@ -31,7 +31,10 @@ def start():
    # create the first tetromino to enter the game grid
    # by using the create_tetromino function defined below
    current_tetromino = create_tetromino()
+   next_tetromino = create_tetromino()
    grid.current_tetromino = current_tetromino
+   grid.next_tetromino = next_tetromino
+
 
    # display a simple menu before opening the game
    # by using the display_game_menu function defined below
@@ -78,8 +81,9 @@ def start():
             break
          # create the next tetromino to enter the game grid
          # by using the create_tetromino function defined below
-         current_tetromino = create_tetromino()
+         current_tetromino = grid.next_tetromino
          grid.current_tetromino = current_tetromino
+         grid.next_tetromino = create_tetromino()
 
       # display the game grid with the current tetromino
       grid.display()
