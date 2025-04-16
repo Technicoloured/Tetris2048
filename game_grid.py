@@ -1,9 +1,11 @@
 from operator import truediv
+
+import pygame # for soundplay
+
 import lib.stddraw as stddraw
 from lib.color import Color
 from point import Point
 import numpy as np
-from tile import Tile
 import copy as cp
 
 
@@ -23,6 +25,7 @@ class GameGrid:
         self.grid_pattern = True
         self.pattern_color = Color(255, 230, 238)
 
+
     def display(self):
         stddraw.clear(self.empty_cell_color)
         self.draw_grid()
@@ -35,22 +38,21 @@ class GameGrid:
         stddraw.setPenColor(stddraw.BLACK)
         stddraw.text(self.grid_width + 3, 1, "Score: 0")
 
-
     def draw_next_tetromino(self):
         if self.next_tetromino is not None:
             # Draw "Next:" label
             stddraw.setPenColor(Color(231, 84, 128))
             stddraw.setFontFamily("Arial")
             stddraw.setFontSize(14)
-            stddraw.text(self.grid_width + 3, self.grid_height - 1.5, "Next:")
+            stddraw.text(self.grid_width - 3, self.grid_height - 1.5, "Next:")
 
             # Save original position
             original_pos = cp.copy(self.next_tetromino.bottom_left_cell)
 
             # Position for preview (top right)
             preview_size = len(self.next_tetromino.tile_matrix)
-            self.next_tetromino.bottom_left_cell.x = self.grid_width + 2
-            self.next_tetromino.bottom_left_cell.y = self.grid_height - len(self.next_tetromino.tile_matrix) - 2
+            self.next_tetromino.bottom_left_cell.x = self.grid_width - preview_size - 1
+            self.next_tetromino.bottom_left_cell.y = self.grid_height - preview_size - 2
 
             # Draw scaled down
             for row in range(preview_size):
@@ -113,13 +115,54 @@ class GameGrid:
 
     def remove_full_rows(self):
         row = self.grid_height - 1
+        rows_cleared = [] #for the animation
         while row >= 0:
             if self.is_full(row):
+                rows_cleared.append(row)
                 for r in range(row, self.grid_height - 1):
                     self.tile_matrix[r] = self.tile_matrix[r + 1].copy()
                 self.tile_matrix[self.grid_height - 1] = np.full(self.grid_width, None)
             else:
                 row -= 1
+
+        #if any rows were cleared, show the animation
+        if rows_cleared:
+            sound_effect = pygame.mixer.Sound('bubblepop.mp3')
+            sound_effect.set_volume(0.2)
+            sound_effect.play()
+            self.animate_row_clear(rows_cleared)
+        return len(rows_cleared)
+
+    def animate_row_clear(self, rows):
+        # Number of animation frames
+        frames = 6
+
+        for frame in range(frames):
+            # Flash effect - alternate between white and original colors
+            for row in rows:
+                for col in range(self.grid_width):
+                    if self.tile_matrix[row][col] is not None:
+                        # Alternate between white and original color
+                        if frame % 2 == 0:
+                            # Save original colors if first frame
+                            if frame == 0:
+                                self.tile_matrix[row][col].original_bg = self.tile_matrix[row][col].background_color
+                                self.tile_matrix[row][col].original_fg = self.tile_matrix[row][col].foreground_color
+                                self.tile_matrix[row][col].original_box = self.tile_matrix[row][col].box_color
+
+                            # Set to white
+                            self.tile_matrix[row][col].background_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].foreground_color = Color(255, 255, 255)
+                            self.tile_matrix[row][col].box_color = Color(255, 255, 255)
+                        else:
+                            # Restore original colors
+                            self.tile_matrix[row][col].background_color = self.tile_matrix[row][col].original_bg
+                            self.tile_matrix[row][col].foreground_color = self.tile_matrix[row][col].original_fg
+                            self.tile_matrix[row][col].box_color = self.tile_matrix[row][col].original_box
+
+            # Display the animation frame
+            self.display()
+            stddraw.show(50)  # Show each frame for 50ms
 
     def update_grid(self, tiles_to_lock, blc_position):
         self.current_tetromino = None
