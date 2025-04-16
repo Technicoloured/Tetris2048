@@ -132,6 +132,21 @@ def display_game_menu(grid_height, grid_width):
    stddraw.setPenColor(text_color)
    text_to_display = "Click Here to Start the Game"
    stddraw.text(img_center_x, 5, text_to_display)
+
+   # Display names on the right with a thicker and more serious font
+   name_x = grid_width + 3
+   name_y = grid_height - 5
+   stddraw.setFontFamily("Arial Black")  # Changing to Arial Black (bold)
+   stddraw.setFontSize(18)  # Making the font size a bit bigger
+   stddraw.text(name_x, name_y, "Melike Gürcan")
+   stddraw.text(name_x, name_y - 1, "Sudenur Bilgin")
+   stddraw.text(name_x, name_y - 2, "Pınar Günal")
+
+   # Display "COMP204" on the next line
+   stddraw.text(name_x, name_y - 4, "COMP204")
+   # Display "Project 2" on the line after that
+   stddraw.text(name_x, name_y - 5, "Project 2")
+
    # the user interaction loop for the simple menu
    while True:
       # display the menu and wait for a short time (50 ms)
