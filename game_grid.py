@@ -24,46 +24,53 @@ class GameGrid:
         self.box_thickness = 0.008
         self.grid_pattern = True
         self.pattern_color = Color(255, 230, 238)
-
+        self.sidebar_width = 6  # Width of the sidebar area
 
     def display(self):
+        # Clear with empty cell color for both grid and sidebar
         stddraw.clear(self.empty_cell_color)
         self.draw_grid()
         if self.current_tetromino is not None:
             self.current_tetromino.draw()
-        self.draw_next_tetromino()  # Draw next piece preview
+        self.draw_next_tetromino()
         self.draw_boundaries()
+
+        # Draw sidebar boundary
+        stddraw.setPenColor(self.boundary_color)
+        stddraw.setPenRadius(self.box_thickness)
+        stddraw.line(self.grid_width - 0.5, -0.5,
+                     self.grid_width - 0.5, self.grid_height - 0.5)
+        stddraw.setPenRadius()
+
         stddraw.show(250)
-        stddraw.setFontSize(16)
-        stddraw.setPenColor(stddraw.BLACK)
-        stddraw.text(self.grid_width + 3, 1, "Score: 0")
 
     def draw_next_tetromino(self):
         if self.next_tetromino is not None:
             # Draw "Next:" label
             stddraw.setPenColor(Color(231, 84, 128))
             stddraw.setFontFamily("Arial")
-            stddraw.setFontSize(14)
-            stddraw.text(self.grid_width - 3, self.grid_height - 1.5, "Next:")
+            stddraw.setFontSize(16)
+            stddraw.text(self.grid_width + self.sidebar_width / 2,
+                         self.grid_height - 2, "Next Piece")
 
             # Save original position
             original_pos = cp.copy(self.next_tetromino.bottom_left_cell)
 
-            # Position for preview (top right)
+            # Calculate preview position (centered in sidebar)
             preview_size = len(self.next_tetromino.tile_matrix)
-            self.next_tetromino.bottom_left_cell.x = self.grid_width - preview_size - 1
-            self.next_tetromino.bottom_left_cell.y = self.grid_height - preview_size - 2
+            self.next_tetromino.bottom_left_cell.x = self.grid_width + (self.sidebar_width - preview_size) / 2
+            self.next_tetromino.bottom_left_cell.y = self.grid_height - 5
 
-            # Draw scaled down
+            # Draw the next tetromino
             for row in range(preview_size):
                 for col in range(preview_size):
                     if self.next_tetromino.tile_matrix[row][col] is not None:
                         position = self.next_tetromino.get_cell_position(row, col)
-                        if position.y < self.grid_height:
-                            self.next_tetromino.tile_matrix[row][col].draw(position, 0.8)  # Smaller size
+                        self.next_tetromino.tile_matrix[row][col].draw(position, 0.8)  # Smaller size
 
             # Restore original position
             self.next_tetromino.bottom_left_cell = original_pos
+
 
     def draw_grid(self):
         if self.grid_pattern:
