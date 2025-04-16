@@ -29,7 +29,7 @@ class Tetromino:
          occupied_cells.append((1, 0))
          occupied_cells.append((0, 1))
          occupied_cells.append((1, 1))
-      elif self.type == 'Z':
+      elif self.type == 'S':
          n = 3  # n = number of rows = number of columns in the tile matrix
          # shape of the tetromino Z in its initial rotation state
          occupied_cells.append((0, 1))  # (column_index, row_index)
@@ -51,7 +51,7 @@ class Tetromino:
          occupied_cells.append((1, 1))
          occupied_cells.append((1, 2))
 
-      elif self.type == 'S':
+      elif self.type == 'Z':
          n = 3
          occupied_cells.append((0, 1))  # (column_index, row_index)
          occupied_cells.append((1, 1))
