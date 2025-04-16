@@ -19,10 +19,10 @@ def start():
    # set the dimensions of the game grid
    grid_h, grid_w = 20, 12
    # set the size of the drawing canvas (the displayed window)
-   canvas_h, canvas_w = 40 * grid_h, 40 * grid_w
+   canvas_h, canvas_w = 40 * grid_h, 40 * (grid_w + 6)
    stddraw.setCanvasSize(canvas_w, canvas_h)
    # set the scale of the coordinate system for the drawing canvas
-   stddraw.setXscale(-0.5, grid_w - 0.5)
+   stddraw.setXscale(-0.5, grid_w + 6 - 0.5)
    stddraw.setYscale(-0.5, grid_h - 0.5)
 
    # set the game grid dimension values stored and used in the Tetromino class
@@ -34,6 +34,7 @@ def start():
    # by using the create_tetromino function defined below
    current_tetromino = create_tetromino()
    grid.current_tetromino = current_tetromino
+   grid.next_tetromino = create_tetromino()
 
    # display a simple menu before opening the game
    # by using the display_game_menu function defined below
@@ -57,10 +58,10 @@ def start():
             # move the active tetromino down by one
             # (soft drop: causes the tetromino to fall down faster)
             current_tetromino.move(key_typed, grid)
-         #rotation
+         # rotation
          elif key_typed == "up":
             current_tetromino.rotate(grid)
-         #hard drop
+         # hard drop
          elif key_typed == "space":
             current_tetromino.hard_drop(grid)
          # clear the queue of the pressed keys for a smoother interaction
@@ -82,9 +83,9 @@ def start():
          if game_over:
             break
          # create the next tetromino to enter the game grid
-         # by using the create_tetromino function defined below
-         current_tetromino = create_tetromino()
+         current_tetromino = grid.next_tetromino  # Use the next tetromino
          grid.current_tetromino = current_tetromino
+         grid.next_tetromino = create_tetromino()  # Create a new next tetromino
 
       # display the game grid with the current tetromino
       grid.display()
@@ -133,20 +134,6 @@ def display_game_menu(grid_height, grid_width):
    stddraw.setPenColor(text_color)
    text_to_display = "Click Here to Start the Game"
    stddraw.text(img_center_x, 5, text_to_display)
-   # Display names on the right with a thicker and more serious font
-   name_x = grid_width + 3
-   name_y = grid_height - 5
-   stddraw.setFontFamily("Arial Black")  # Changing to Arial Black (bold)
-   stddraw.setFontSize(18)  # Making the font size a bit bigger
-   stddraw.text(name_x, name_y, "Melike Gürcan")
-   stddraw.text(name_x, name_y - 1, "Sudenur Bilgin")
-   stddraw.text(name_x, name_y - 2, "Pınar Günal")
-
-   # Display "COMP204" on the next line
-   stddraw.text(name_x, name_y - 4, "COMP204")
-   # Display "Project 2" on the line after that
-   stddraw.text(name_x, name_y - 5, "Project 2")
-
    # the user interaction loop for the simple menu
    while True:
       # display the menu and wait for a short time (50 ms)
@@ -161,7 +148,7 @@ def display_game_menu(grid_height, grid_width):
             if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
                pygame.mixer.init()
                pygame.mixer.music.load('tetris99.mp3')
-               pygame.mixer.music.set_volume(0.02)
+               pygame.mixer.music.set_volume(0.06)
                pygame.mixer.music.play(-1)
                break  # break the loop to end the method and start the game
 
