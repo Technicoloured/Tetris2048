@@ -52,7 +52,7 @@ class GameGrid:
         stddraw.setPenRadius(self.box_thickness)
         stddraw.line(self.grid_width - 0.5, -0.5, self.grid_width - 0.5, self.grid_height - 0.5)
         stddraw.setPenRadius()
-        stddraw.show(400)
+        stddraw.show(450)
 
     def draw_next_tetromino(self):
         if self.next_tetromino is not None:
@@ -116,7 +116,10 @@ class GameGrid:
         cleared_rows = []
         while row >= 0:
             if self.is_full(row):
+                row_score = sum(tile.number for tile in self.tile_matrix[row] if tile is not None)
+                self.score += row_score
                 cleared_rows.append(row)
+
                 for r in range(row, self.grid_height - 1):
                     self.tile_matrix[r] = self.tile_matrix[r + 1].copy()
                 self.tile_matrix[self.grid_height - 1] = np.full(self.grid_width, None)
