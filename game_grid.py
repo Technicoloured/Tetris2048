@@ -52,7 +52,7 @@ class GameGrid:
         stddraw.setPenRadius(self.box_thickness)
         stddraw.line(self.grid_width - 0.5, -0.5, self.grid_width - 0.5, self.grid_height - 0.5)
         stddraw.setPenRadius()
-        stddraw.show(450)
+        stddraw.show(400)
 
     def draw_next_tetromino(self):
         if self.next_tetromino is not None:
