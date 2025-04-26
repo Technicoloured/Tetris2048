@@ -24,6 +24,7 @@ class Tile:
          self.background_color = Color(255, 182, 193)  # blush pink
          self.foreground_color = Color(200, 80, 120)
          self.box_color = Color(200, 80, 120)
+         self.set_color_by_number()
 
    # A method for drawing this tile at a given position with a given length
    def draw(self, position, length=1):  # length defaults to 1
@@ -40,3 +41,59 @@ class Tile:
       stddraw.setFontFamily(Tile.font_family)
       stddraw.setFontSize(Tile.font_size)
       stddraw.text(position.x, position.y, str(self.number))
+
+   def set_color_by_number(self):
+      if self.number == 2:
+         self.background_color = Color(244, 217, 208)  # F4D9D0 - soft blush
+         self.foreground_color = Color(146, 26, 64)  # 921A40 - deep wine
+         self.box_color = Color(146, 26, 64)
+
+      elif self.number == 4:
+         self.background_color = Color(247, 200, 192)  # D9ABAB - pink beige
+         self.foreground_color = Color(146, 26, 64)
+         self.box_color = Color(146, 26, 64)
+
+      elif self.number == 8:
+         self.background_color = Color(199, 91, 122)  # C75B7A - rose
+         self.foreground_color = Color(110, 20, 40)
+         self.box_color = Color(110, 20, 40)
+
+      elif self.number == 16:
+         self.background_color = Color(146, 26, 64)  # 921A40 - deep wine
+         self.foreground_color = Color(244, 217, 208)
+         self.box_color = Color(244, 217, 208)
+
+      elif self.number == 32:
+         self.background_color = Color(110, 20, 50)  # deeper burgundy
+         self.foreground_color = Color(244, 217, 208)
+         self.box_color = Color(244, 217, 208)
+
+      elif self.number == 64:
+         self.background_color = Color(90, 15, 40)  # rich plum-brown
+         self.foreground_color = Color(217, 171, 171)
+         self.box_color = Color(217, 171, 171)
+
+      elif self.number == 128:
+         self.background_color = Color(70, 10, 30)  # dark red-brown
+         self.foreground_color = Color(199, 91, 122)
+         self.box_color = Color(199, 91, 122)
+
+      elif self.number == 256:
+         self.background_color = Color(50, 5, 20)  # near black-cherry
+         self.foreground_color = Color(217, 171, 171)
+         self.box_color = Color(217, 171, 171)
+
+      elif self.number == 512:
+         self.background_color = Color(30, 0, 10)  # very dark wine
+         self.foreground_color = Color(244, 217, 208)
+         self.box_color = Color(244, 217, 208)
+
+      elif self.number == 1024:
+         self.background_color = Color(20, 0, 0)  # deep red-black
+         self.foreground_color = Color(255, 255, 255)  # white
+         self.box_color = Color(255, 255, 255)
+
+      elif self.number == 2048:
+         self.background_color = Color(10, 0, 0)  # ultra-dark brown
+         self.foreground_color = Color(255, 255, 255)
+         self.box_color = Color(255, 255, 255)
